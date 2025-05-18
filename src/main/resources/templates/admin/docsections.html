@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Documentation Sections</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+    <div th:insert="admin/fragments/navigation :: navigation"></div>
+
+    <h1>Manage Documentation Sections</h1>
+
+    <h2>Create New Documentation Section</h2>
+    <form th:action="@{/admin/docsections}" method="post">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="path_slug">Path Slug:</label>
+            <input type="text" id="path_slug" name="pathSlug" required>
+        </div>
+        <div>
+            <button type="submit">Create Section</button>
+        </div>
+    </form>
+
+    <h2>Existing Documentation Sections</h2>
+    <table>
+        <thead>
+            <tr>
+                <th><a th:href="@{/admin/docsections(page=${docSections.number}, size=${docSections.size}, sort='id,' + (${#strings.contains(docSections.sort, 'id,asc')} ? 'desc' : 'asc'))}">ID</a></th>
+                <th><a th:href="@{/admin/docsections(page=${docSections.number}, size=${docSections.size}, sort='name,' + (${#strings.contains(docSections.sort, 'name,asc')} ? 'desc' : 'asc'))}">Name</a></th>
+                <th><a th:href="@{/admin/docsections(page=${docSections.number}, size=${docSections.size}, sort='pathSlug,' + (${#strings.contains(docSections.sort, 'pathSlug,asc')} ? 'desc' : 'asc'))}">Path Slug</a></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="section : ${docSections}">
+                <td th:text="${section.id}">ID</td>
+                <td>
+                    <span th:text="${section.name}"></span>
+                </td>
+                <td>
+                    <span th:text="${section.pathSlug}"></span>
+                </td>
+                <td>
+                    <a th:href="@{/admin/docsections/{id}(id=${section.id})}">View</a> |
+                    <a th:href="@{/admin/docsections/edit/{id}(id=${section.id})}">Edit</a> |
+                    <form th:action="@{/admin/docsections/delete/{id}(id=${section.id})}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${docSections.totalPages > 0}" class="pagination">
+        <span th:text="'Page ' + ${docSections.number + 1} + ' of ' + ${docSections.totalPages}"></span>
+        <ul>
+            <li th:class="${docSections.first} ? 'disabled'">
+                <a th:href="@{/admin/docsections(page=0, size=${docSections.size}, sort=${docSections.sort})}">First</a>
+            </li>
+            <li th:class="${docSections.hasPrevious()} ? '' : 'disabled'">
+                <a th:href="@{/admin/docsections(page=${docSections.number - 1}, size=${docSections.size}, sort=${docSections.sort})}">Previous</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, docSections.totalPages - 1)}" th:class="${i == docSections.number} ? 'active'">
+                <a th:href="@{/admin/docsections(page=${i}, size=${docSections.size}, sort=${docSections.sort})}" th:text="${i + 1}"></a>
+            </li>
+            <li th:class="${docSections.hasNext()} ? '' : 'disabled'">
+                <a th:href="@{/admin/docsections(page=${docSections.number + 1}, size=${docSections.size}, sort=${docSections.sort})}">Next</a>
+            </li>
+            <li th:class="${docSections.last} ? 'disabled'">
+                <a th:href="@{/admin/docsections(page=${docSections.totalPages - 1}, size=${docSections.size}, sort=${docSections.sort})}">Last</a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

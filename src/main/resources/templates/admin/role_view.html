@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Role</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="admin/fragments/navigation :: navigation"></div>
+    <div class="container">
+        <h1>Role Details</h1>
+        <p><strong>ID:</strong> <span th:text="${role.id}"></span></p>
+        <p><strong>Name:</strong> <span th:text="${role.name}"></span></p>
+        <p><strong>Description:</strong> <span th:text="${role.description}"></span></p>
+
+        <a th:href="@{/admin/roles/edit/__${role.id}__}">Edit Role</a>
+        <a th:href="@{/admin/roles}">Back to Roles List</a>
+    </div>
+</body>
+</html>

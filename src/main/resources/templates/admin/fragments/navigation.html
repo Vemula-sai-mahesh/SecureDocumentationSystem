@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="navigation">
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin/users}">Manage Users</a></li>
+            <li><a th:href="@{/admin/roles}">Manage Roles</a></li>
+            <li><a th:href="@{/admin/docsections}">Manage Doc Sections</a></li>
+            <li><a th:href="@{/admin/role-doc-sections}">Manage Role Doc Permissions</a></li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

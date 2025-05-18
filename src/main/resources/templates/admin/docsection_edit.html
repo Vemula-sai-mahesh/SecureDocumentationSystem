@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Documentation Section</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div th:insert="admin/fragments/navigation :: navigation"></div>
+    <h1>Edit Documentation Section</h1>
+
+    <form th:action="@{/admin/docsections/edit/{id}(id=${docSection.id})}" th:object="${docSection}" method="post">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" th:field="*{name}" required>
+        </div>
+        <div>
+            <label for="pathSlug">Path Slug:</label>
+            <input type="text" id="pathSlug" th:field="*{pathSlug}" required>
+        </div>
+        <div>
+            <button type="submit">Save Changes</button>
+        </div>
+    </form>
+
+    <a th:href="@{/admin/docsections}">Back to Documentation Sections</a>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Roles</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div th:replace="admin/fragments/navigation :: navigation"></div>
+    <h1>Manage Roles</h1>
+
+    <h2>Create New Role</h2>
+    <form th:action="@{/admin/roles}" method="post">
+        <div>
+            <label for="name">Role Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+        </div>
+        <button type="submit">Create Role</button>
+    </form>
+
+    <hr>
+
+    <h2>Existing Roles</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+ <th>
+ <a th:href="@{/admin/roles(page=${roles.number}, size=${roles.size}, sort='name,' + (${#strings.equals(roles.sort.getOrderFor('name')?.direction, 'ASC')} ? 'desc' : 'asc'))}">
+ Name
+ <span th:if="${#strings.equals(roles.sort.getOrderFor('name')?.direction, 'ASC')}">&uarr;</span>
+ <span th:if="${#strings.equals(roles.sort.getOrderFor('name')?.direction, 'DESC')}">&darr;</span>
+ </a>
+ </th>
+ <th>
+ <a th:href="@{/admin/roles(page=${roles.number}, size=${roles.size}, sort='description,' + (${#strings.equals(roles.sort.getOrderFor('description')?.direction, 'ASC')} ? 'desc' : 'asc'))}">
+ Description
+ <span th:if="${#strings.equals(roles.sort.getOrderFor('description')?.direction, 'ASC')}">&uarr;</span>
+ <span th:if="${#strings.equals(roles.sort.getOrderFor('description')?.direction, 'DESC')}">&darr;</span>
+ </a>
+ </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="role : ${roles}">
+                <td th:text="${role.id}">ID</td>
+                <td th:text="${role.name}">Role Name</td>
+                <td th:text="${role.description}">Description</td>
+                <td>
+                    <a th:href="@{/admin/roles/{id}(id=${role.id})}">View</a> |
+                    <a th:href="@{/admin/roles/edit/{id}(id=${role.id})}">Edit</a> |
+                    <form th:action="@{/admin/roles/delete/{id}(id=${role.id})}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this role?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div th:if="${roles.totalPages > 0}" class="pagination">
+        Page <span th:text="${roles.number + 1}">1</span> of <span th:text="${roles.totalPages}">1</span>
+ &nbsp;
+        <span th:if="${roles.hasPrevious()}">
+ <a th:href="@{/admin/roles(page=${0}, size=${roles.size}, sort=${#request.getParameter('sort')})}">First</a>
+ <a th:href="@{/admin/roles(page=${roles.number - 1}, size=${roles.size}, sort=${#request.getParameter('sort')})}">Previous</a>
+        </span>
+        <span th:unless="${roles.hasPrevious()}">
+ First Previous
+        </span>
+        &nbsp;
+        <span th:if="${roles.hasNext()}">
+ <a th:href="@{/admin/roles(page=${roles.number + 1}, size=${roles.size}, sort=${#request.getParameter('sort')})}">Next</a>
+ <a th:href="@{/admin/roles(page=${roles.totalPages - 1}, size=${roles.size}, sort=${#request.getParameter('sort')})}">Last</a>
+        </span>
+        <span th:unless="${roles.hasNext()}">
+            Next Last
+        </span>
+    </div>
+
+    <p><a th:href="@{/admin}">Back to Admin Dashboard</a></p>
+</body>
+</html>

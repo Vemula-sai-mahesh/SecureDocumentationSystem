@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Role-Doc Section Mappings</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+    <h1>Manage Role-Doc Section Mappings</h1>
+
+    <div th:replace="admin/fragments/navigation :: navigation"></div>
+
+    <h2>Existing Mappings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th><a th:href="@{/admin/role-doc-sections(page=${mappings.number}, size=${mappings.size}, sort='role.name,' + (${#strings.equals(mappings.sort.getOrderFor('role.name')?.direction,'ASC')} ? 'DESC' : 'ASC'))}">Role</a></th>
+                <th><a th:href="@{/admin/role-doc-sections(page=${mappings.number}, size=${mappings.size}, sort='docSection.name,' + (${#strings.equals(mappings.sort.getOrderFor('docSection.name')?.direction,'ASC')} ? 'DESC' : 'ASC'))}">Documentation Section</a></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="mapping : ${mappings}">
+                <td th:text="${mapping.role.name}">Role Name</td>
+                <td th:text="${mapping.docSection.name}">Doc Section Name</td>
+                <td><form th:action="@{/admin/role-doc-sections/delete/__${mapping.id.roleId}__/__${mapping.id.docSectionId}__}" method="post"><button type="submit">Delete</button></form>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Add New Mapping</h2>
+    <form th:action="@{/admin/role-doc-sections}" method="post">
+        <div>
+            <label for="role">Role:</label>
+            <select id="role" name="roleId">
+                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="docSection">Documentation Section:</label>
+            <select id="docSection" name="docSectionId">
+                <option th:each="docSection : ${docSections}" th:value="${docSection.id}" th:text="${docSection.name}"></option>
+            </select>
+        </div>
+        <button type="submit">Add Mapping</button>
+    </form>
+
+    <div th:if="${mappings.totalPages > 1}">
+        <span>Page <span th:text="${mappings.number + 1}"></span> of <span th:text="${mappings.totalPages}"></span></span>&nbsp;
+        <span th:if="${mappings.hasPrevious()}"><a th:href="@{/admin/role-doc-sections(page=${0},size=${mappings.size},sort=${#request.getParameter('sort')})}">First</a></span>&nbsp;
+        <span th:if="${mappings.hasPrevious()}"><a th:href="@{/admin/role-doc-sections(page=${mappings.number - 1},size=${mappings.size},sort=${#request.getParameter('sort')})}">Previous</a></span>&nbsp;
+        <span th:if="${mappings.hasNext()}"><a th:href="@{/admin/role-doc-sections(page=${mappings.number + 1},size=${mappings.size},sort=${#request.getParameter('sort')})}">Next</a></span>&nbsp;
+        <span th:if="${mappings.hasNext()}"><a th:href="@{/admin/role-doc-sections(page=${mappings.totalPages - 1},size=${mappings.size},sort=${#request.getParameter('sort')})}">Last</a></span>
+    </div>
+
+    <p><a th:href="@{/admin}">Back to Admin Dashboard</a></p>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Documentation Section</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<div th:replace="admin/fragments/navigation :: navigation"></div>
+
+<body>
+    <h1>Documentation Section Details</h1>
+
+    <p><strong>Name:</strong> <span th:text="${docSection.name}">Doc Section Name</span></p>
+    <p><strong>Path Slug:</strong> <span th:text="${docSection.pathSlug}">/doc-section-slug</span></p>
+
+    <a th:href="@{/admin/docsections/edit/{id}(id=${docSection.id})}">Edit</a> |
+    <a th:href="@{/admin/docsections}">Back to List</a>
+</body>
+</html>
